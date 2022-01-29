@@ -1,42 +1,40 @@
-package com.devsuperior.movieflix.entities;
+package com.devsuperior.movieflix.dto;
 
-import javax.persistence.*;
+import com.devsuperior.movieflix.entities.Movie;
+
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
-@Table(name = "tb_movie")
-public class Movie implements Serializable {
+public class MovieDTO implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String subTitle;
     private Integer year;
     private String imgUrl;
-
-    @Column(columnDefinition = "TEXT")
     private String synopsis;
+    private GenreDTO genre;
 
-    @ManyToOne
-    @JoinColumn(name = "genre_id")
-    private Genre genre;
-
-    @OneToMany(mappedBy = "movie")
-    private List<Review> reviews = new ArrayList<>();
-
-    public Movie() {
+    public MovieDTO() {
     }
 
-    public Movie(Long id, String title, String subTitle, Integer year, String imgUrl, String synopsis) {
+    public MovieDTO(Long id, String title, String subTitle, Integer year, String imgUrl, String synopsis, GenreDTO genre) {
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
         this.year = year;
         this.imgUrl = imgUrl;
         this.synopsis = synopsis;
+        this.genre = genre;
+    }
+
+    public MovieDTO(Movie movie) {
+        id = movie.getId();
+        title = movie.getTitle();
+        subTitle = movie.getSubTitle();
+        year = movie.getYear();
+        imgUrl = movie.getImgUrl();
+        synopsis = movie.getSynopsis();
+        genre = new GenreDTO(movie.getGenre());
     }
 
     public Long getId() {
@@ -87,15 +85,11 @@ public class Movie implements Serializable {
         this.synopsis = synopsis;
     }
 
-    public Genre getGenre() {
+    public GenreDTO getGenre() {
         return genre;
     }
 
-    public void setGenre(Genre genre) {
+    public void setGenre(GenreDTO genre) {
         this.genre = genre;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
     }
 }
